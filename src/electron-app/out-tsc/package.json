@@ -1,0 +1,11 @@
+{
+  "name": "MAGNETO",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": {
+    "name": "Maxwell Murphy",
+    "email": "murphy2122@berkeley.edu"
+  },
+  "description": "MAlaria Genetic NEtwork Topology Organizer",
+  "license": "MIT"
+}

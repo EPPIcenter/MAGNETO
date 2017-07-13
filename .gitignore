@@ -1,0 +1,9 @@
+node_modules/
+build/
+dist/
+/app/
+*.js.map
+out-tsc/*.js
+.DS_Store
+
+*.log
