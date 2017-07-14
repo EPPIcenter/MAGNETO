@@ -42,6 +42,8 @@ export class NetworkPanelComponent implements OnInit {
       return Object.assign({}, node, {
         x: node.x || 0,
         y: node.y || 0,
+        fx: null,
+        fy: null,
         color: typeof(this.nodeColor) === 'function' ? this.nodeColor.apply(this, [node]) : this.nodeColor,
         edgeWidth: typeof(this.nodeEdgeWidth) === 'function' ? this.nodeEdgeWidth.apply(this, [node]) : this.nodeEdgeWidth,
         size: typeof(this.nodeSize) === 'function' ? this.nodeSize.apply(this, [node]) : this.nodeSize
