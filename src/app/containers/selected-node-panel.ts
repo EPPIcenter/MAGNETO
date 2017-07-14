@@ -60,6 +60,7 @@ export class SelectedNodePanelComponent implements OnInit {
   @Input() vizMargin = 5;
   @Input() textOffset = 47;
   @Input() leftOffset = 10;
+  @Input() rightBuffer = 4;
   @Input() blockBuffer = 2;
   @Input() fontSize = 14;
   @Input() font = 'Helvetica Neue';
@@ -69,11 +70,19 @@ export class SelectedNodePanelComponent implements OnInit {
   private _selectedNode: Node;
   @Input()
   set selectedNode(node: Node) {
-    console.log("Loading Selected Node");
     this._selectedNode = node;
-    this.resizeCanvas();
-    this.clearCanvas();
-    this.renderLoci();
+    if (this.selectedNode) {
+      const maxAlleles = Object.keys(this._selectedNode.alleles).reduce((currMax, locus) => {
+        return Math.max(this._selectedNode.alleles[locus].length, currMax);
+      }, 0);
+
+      this.alleleWidth = Math.floor(
+        ((this.canvas.width - this.textOffset - this.leftOffset - this.rightBuffer) / maxAlleles) -  this.blockBuffer
+      );
+      this.resizeCanvas();
+      this.clearCanvas();
+      this.renderLoci();
+    }
   }
   get selectedNode() { return this._selectedNode; }
 
@@ -91,6 +100,7 @@ export class SelectedNodePanelComponent implements OnInit {
       this.resizeCanvas();
       // Hack to make rendered allele blocks not fuzzy
       this.context.translate(0.5, 0.5);
+      // this.context.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
     }, 300);
   }
 
@@ -145,10 +155,10 @@ export class SelectedNodePanelComponent implements OnInit {
     this.context.font = this.fontSize + 'px ' + this.font;
     Object.keys(this.selectedNode.alleles).forEach((locus, i) => {
       maxPrevalence = Math.max(...this.selectedNode.alleles[locus]);
-      yOffset = i * (this.alleleHeight + (2 * this.rowBuffer)) + this.vizMargin;
-      this.context.fillText(locus, this.labelXPadding, yOffset + this.labelYPadding);
+      yOffset = Math.floor(i * (this.alleleHeight + (2 * this.rowBuffer)) + this.vizMargin);
+      this.context.fillText(locus, Math.floor(this.labelXPadding), Math.floor(yOffset + this.labelYPadding));
       this.selectedNode.alleles[locus].forEach((prevalence, j) => {
-        xOffset = j * (this.alleleWidth + this.blockBuffer) + this.leftOffset + this.textOffset;
+        xOffset = Math.floor(j * (this.alleleWidth + this.blockBuffer) + this.leftOffset + this.textOffset);
         this.context.save();
         this.context.beginPath();
         this.context.rect(xOffset, yOffset, this.alleleWidth, this.alleleHeight);
