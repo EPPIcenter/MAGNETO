@@ -1,17 +1,6 @@
 function summarizeNetwork (increment, transitions, nodesByIndex) {
     const networkMap = {};
-    // const networkSummary = [];
     const startingNetwork = new Set();
-    // const startingNetwork = getNetwork(transitions, burnin + 1);
-    // transitions = transitions.slice(burnin, transitions.length);
-    // const increment = 1 / transitions.length;
-    // startingNetwork.forEach(idx => {
-    //   if (networkMap.hasOwnProperty(idx)) {
-    //     networkMap[idx] = networkMap[idx] + increment;
-    //   } else {
-    //     networkMap[idx] = increment;
-    //   }
-    // });
 
     transitions.forEach(transition => {
       transition.add.forEach(j => startingNetwork.add(j));
@@ -34,11 +23,6 @@ function summarizeNetwork (increment, transitions, nodesByIndex) {
         }
       });
     });
-    // Object.keys(networkMap).forEach(idx => {
-    //   const e = indexToEdge(+idx, nodesByIndex);
-    //   e['weight'] = networkMap[idx];
-    //   networkSummary.push(e);
-    // });
 
     return networkMap;
   }
@@ -64,12 +48,10 @@ function indexToEdge(index, nodesByIndex) {
 }
 
 addEventListener('message', (message) => {
-  console.log("Loading Worker");
   const data = JSON.parse(message.data)
   const increment = data.increment
   const transitions = data.transitions;
   const nodes = data.nodes;
   const networkSummary = summarizeNetwork(increment, transitions, nodes)
-  console.log("Returning network summary");
   postMessage(JSON.stringify(networkSummary));
 });

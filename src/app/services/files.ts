@@ -137,7 +137,6 @@ export class FileService {
         observer.complete();
       });
 
-
     });
   }
 
@@ -282,24 +281,14 @@ export class FileService {
       .map(networkMap => {
         const networkSummary: Edge[] = [];
         const totalNodes = Object.keys(nodes).length;
-        console.log("Total edges", Object.keys(networkMap).length);
         Object.keys(networkMap).forEach(idx => {
           const e = this.indexToEdge(+idx, totalNodes);
           e['weight'] = networkMap[idx];
           networkSummary.push(e);
         });
-        console.log("All Edges Parsed");
         return networkSummary;
       });
     return edgeObservable;
-    // return Observable.create((observer: Observer<any>) => {
-    //   worker.postMessage(message);
-    //   worker.addEventListener('message', m => {
-    //     observer.next(JSON.parse(m.data));
-    //     observer.complete();
-    //     worker.removeEventListener('message');
-    //   });
-    // });
   }
 
   private _parseNetworkBuffer(buffer): StringEdgeList {
