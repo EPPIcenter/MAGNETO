@@ -129,7 +129,7 @@ export class SelectedNodePanelComponent implements OnInit {
         this.context.beginPath();
         this.context.rect(xOffset, yOffset, this.alleleWidth, this.alleleHeight);
         const presentInParent = this.parentNodes.reduce((inAnyParent: boolean, node: Node) => {
-            return !!node.alleles[locus][j];
+            return !!node.alleles[locus][j] || inAnyParent;
         }, false);
         if (allele && presentInParent) {
           this.context.fillStyle = 'blue';
