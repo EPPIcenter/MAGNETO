@@ -2,10 +2,12 @@
   "scripts": {
     "ng": "ng",
     "start": "webpack-dev-server --port=4200",
-    "build": "webpack --watch",
+    "cont-build": "webpack --watch",
+    "build": "webpack",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "protractor ./protractor.conf.js",
+    "cont-build-electron": "cp -R src/app/workers/ app/workers && tsc -p src/electron-app  && cp src/electron-app/package.json src/electron-app/out-tsc && cp src/electron-app/out-tsc/* app & yarn run cont-build",
     "build-electron": "cp -R src/app/workers/ app/workers && tsc -p src/electron-app  && cp src/electron-app/package.json src/electron-app/out-tsc && cp src/electron-app/out-tsc/* app & yarn run build",
     "electron": "electron app/",
     "prepree2e": "npm start",
