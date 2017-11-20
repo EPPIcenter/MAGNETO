@@ -26,6 +26,9 @@ export interface Node extends d3.SimulationNodeDatum {
   time: number;
   symptomType: string;
   nodeIndex: number;
+  lat?: number;
+  lon?: number;
+  history?: number;
   alleles: {[locus: string]: number[]};
   features: { [feature: string]: number | string };
   isSource: boolean;

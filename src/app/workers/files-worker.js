@@ -1,6 +1,11 @@
-function summarizeNetwork (increment, transitions, nodesByIndex) {
+function summarizeNetwork (increment, transitions, nodesByIndex, isFirst) {
     const networkMap = {};
-    const startingNetwork = new Set();
+    const initialState = transitions.shift().add;
+    const startingNetwork = new Set(initialState);
+
+    if (isFirst) {
+      initialState.forEach(i => networkMap[i] = increment);
+    }
 
     transitions.forEach(transition => {
       transition.add.forEach(j => startingNetwork.add(j));
@@ -52,6 +57,7 @@ addEventListener('message', (message) => {
   const increment = data.increment
   const transitions = data.transitions;
   const nodes = data.nodes;
-  const networkSummary = summarizeNetwork(increment, transitions, nodes)
+  const isFirst = data.isFirst;
+  const networkSummary = summarizeNetwork(increment, transitions, nodes, isFirst);
   postMessage(JSON.stringify(networkSummary));
 });

@@ -92,6 +92,7 @@ export class FileEffects {
       } else {
         return this.fileService.summarizeNetwork(burnin, networkTransitions, nodes)
         .map(networkSummary => {
+          
           return new app.SummarizeNetworkAction(networkSummary);
         })
         .catch(err => {

@@ -77,7 +77,7 @@ if (process.platform === 'darwin') {
     {role: 'zoom'},
     {type: 'separator'},
     {role: 'front'}
-  ]
+  ];
 }
 
 const menu = Menu.buildFromTemplate(template);
@@ -99,7 +99,7 @@ function createWindow () {
   }));
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // Emitted when the window is closed.
   win.on('closed', () => {

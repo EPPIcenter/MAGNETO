@@ -237,19 +237,31 @@ export class FileService {
 
   summarizeNetwork(burnin: number, networkTransitions: NetworkTransitionSequence, nodes: NodeByIndexSet): Observable<Edge[]> {
     // const networkSummary = [];
-    const numCores = navigator.hardwareConcurrency;
+    // const numCores = navigator.hardwareConcurrency;
+    const numCores = 1; // Need to fix bug in calculating transitions across cores
     const workerObservables: Observable<any>[] = [];
-    const startingNetwork = this.getNetwork(networkTransitions, burnin + 1);
-    const increment = 1 / (networkTransitions.length - burnin);
-    let i = 0;
+    // const startingNetwork = this.getNetwork(networkTransitions, burnin + 1);
+    // console.log(startingNetwork);
+    const increment = 1 / (networkTransitions.length - burnin + 1);
     const transitions = networkTransitions.slice(burnin, networkTransitions.length);
+    // transitions.unshift({
+    //   add: Array.from(startingNetwork),
+    //   remove: []
+    // });
+    const subsetSize = transitions.length / numCores;
+    let i = 0;
     while (i < numCores) {
-      const subsetSize = transitions.length / numCores;
       const transitionSubset = transitions.slice(i * subsetSize, (i + 1) * (subsetSize));
+      const baseNetwork = this.getNetwork(networkTransitions, burnin + 1 + i * subsetSize);
+      transitionSubset.unshift({
+        add: Array.from(baseNetwork),
+        remove: []
+      });
       const message = JSON.stringify({
         increment: increment,
         transitions: transitionSubset,
-        nodes: nodes
+        nodes: nodes,
+        isFirst: i === 0
       });
       const worker = new Worker('./workers/files-worker.js');
       const workerObservable = Observable.create((observer: Observer<any>) => {
@@ -328,6 +340,9 @@ export class FileService {
       time: null,
       nodeIndex: null,
       symptomType: null,
+      lat: null,
+      lon: null,
+      history: null,
       alleles: {},
       features: {},
       isSource: false
@@ -346,7 +361,13 @@ export class FileService {
         } else if (fieldLabel === 'label' || fieldLabel === 'Label') {
           node.label = field;
         } else if (fieldLabel === 'type' || fieldLabel === 'Type') {
-          node.symptomType = fieldLabel;
+          node.symptomType = field;
+        } else if (fieldLabel === 'lat' || fieldLabel === 'Lat') {
+          node.lat = +field;
+        } else if (fieldLabel === 'lon' || fieldLabel === 'Lon') {
+          node.lon = +field;
+        } else if (fieldLabel === 'history' || fieldLabel === 'History') {
+          node.history = +field;
         } else {
           // convert to string, remove any character that isn't 1 or 0, split, and cast to integers
           node.alleles[fieldLabel] = field.replace(/[^01]/gi, '').split('').map(a => +a);
