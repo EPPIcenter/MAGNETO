@@ -7,3 +7,5 @@ out-tsc/*.js
 .DS_Store
 
 *.log
+
+src/electron-app/out-tsc/

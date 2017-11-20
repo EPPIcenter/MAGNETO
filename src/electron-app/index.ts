@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu } from 'electron';
-import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
+// import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import * as path from 'path';
 import * as url from 'url';
 
