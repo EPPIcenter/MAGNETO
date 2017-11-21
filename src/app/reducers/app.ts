@@ -249,7 +249,7 @@ export const getRenderedEdges = createSelector(getRenderedNodes, getNetworkSumma
   return renderedEdges;
 });
 
-export const getSelectedNode = createSelector(getNodesByIndex, getSelectedNodeIndex, (nodes, idx) => idx ? nodes[idx] : null);
+export const getSelectedNode = createSelector(getNodesByIndex, getSelectedNodeIndex, (nodes, idx) => nodes[idx] ? nodes[idx] : null);
 
 export const getNetworkCount = createSelector(getNetworkTransitions, (transitions) => {
   return transitions.length;
